@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="calculator">
+        <input type="text" id="display">
+        <div id="buttons">
+          <button class="number" value="7">7</button>
+          <button class="number" value="8">8</button>
+          <button class="number" value="9">9</button>
+          <button class="operator" value="/">/</button>
+          <button class="number" value="4">4</button>
+          <button class="number" value="5">5</button>
+          <button class="number" value="6">6</button>
+          <button class="operator" value="*">*</button>
+          <button class="number" value="1">1</button>
+          <button class="number" value="2">2</button>
+          <button class="number" value="3">3</button>
+          <button class="operator" value="-">-</button>
+          <button class="number" value="0">0</button>
+          <button class="number" value=".">.</button>
+          <button id="equals" value="=">=</button>
+          <button class="operator" value="+">+</button>
+        </div>
+      </div>
+
+      <style>
+        #calculator {
+  width: 240px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+#display {
+  width: 214px;
+  height: 50px;
+  background-color: #fff;
+  border: none;
+  font-size: 1.5em;
+  text-align: right;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+#buttons {
+  display: flex;
+  flex-wrap: wrap;
+  width: 214px;
+  margin: 0 auto;
+}
+
+button {
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  font-size: 1.5em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #eee;
+}
+
+button.operator {
+  background-color: #fd0;
+}
+
+button#equals {
+  background-color: #0c0;
+  color: #fff;
+}
+
+      </style>
+
+      <script>
+        const buttons = document.querySelectorAll('#buttons button');
+const display = document.querySelector('#display');
+let firstValue = null;
+let operator = null;
+let waitingForSecondValue = false;
+
+function buttonClick(value) {
+  if (waitingForSecondValue) {
+    display.value = value;
+    waitingForSecondValue = false;
+  } else {
+    display.value == 0 ? display.value = value : display.value += value;
+  }
+}
+
+function operatorClick(value) {
+  firstValue = display.value;
+  operator = value;
+  waitingForSecondValue = true;
+}
+
+function equalsClick() {
+  let result = null;
+
+  switch (operator) {
+    case "+":
+      result = parseFloat(firstValue) + parseFloat(display.value);
+      break;
+    case "-":
+      result = parseFloat(firstValue) - parseFloat(display.value);
+      break;
+    case "*":
+      result = parseFloat(firstValue) * parseFloat(display.value);
+      break;
+    case "/":
+      result = parseFloat(firstValue) / parseFloat(display.value);
+      break;
+  }
+
+  display.value = result;
+  firstValue = null;
+  operator = null;
+  waitingForSecondValue = true;
+}
+
+buttons.forEach(button => {
+  if (button.classList.contains('number')) {
+    button.addEventListener('click', () => buttonClick(button.value));
+  } else if (button.classList.contains('operator')) {
+    button.addEventListener('click', () => operatorClick(button.value));
+  } else if (button.id == 'equals') {
+    button.addEventListener('click', () => equalsClick());
+  }
+});
+
+      </script>
+</body>
+</html>
